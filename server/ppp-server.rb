@@ -21,16 +21,33 @@ end
 #-----------------------------
 get '/' do
   @records = DB[:commands].all
-  haml :push
+  haml :index
 end
 
 post '/' do
+  DB_refresh()
   @records = DB[:commands].all
-#  params[:keys].split(';').each do |key|
-#    @records.push( DB[:commands][:key => key] )
-#  end
-  haml :push
+  haml :index
 end
+#-----------------------------
+# Helper Funcions
+#-----------------------------
+# Add any new scripts to database
+def DB_refresh
+  # Each Script File (sf)
+  CFG[:file_structure][:scripts].each do |sf|
+    # Open the directory and add any scripts to executable list
+    Dir.open(CFG[:file_structure][:root]+sf) do |dir|
+      # Loop through each File (f) in the Script File (sf) location
+      dir.each do |f|
+        next if f == '.' or f == '..' or DB[:commands][:command => f]
+        DB[:commands].insert(:command => f)
+      end
+    end
+  end
+end
+# When server starts check for new scripts
+DB_refresh()
 
 __END__
 
@@ -40,13 +57,13 @@ __END__
   %head
     %title Add Commands
   %body
+    Records Found:
+    %br
+    - @records.each do |record|
+      = record[:command]
+      %br
     %form{ :action => '/', :method => :post}
-      %label
-        Key:
-        %input{ :type => 'text', :name => 'key'}
-      %label
-        Command:
-        %input{ :type => 'text', :name => 'command'}
+      %input{ :type =>'submit' :value => 'Refresh'}
 
 @@push
 !!!
