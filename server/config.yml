@@ -1,0 +1,9 @@
+---
+:file_structure:
+    :root: /Users/daicoden/Documents/Ayaion/PoC/
+    :source:
+        - src/
+    :include:
+        - include/
+    :scripts:
+        - tools/scripts
