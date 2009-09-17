@@ -1,9 +1,2 @@
 ---
-:file_structure:
-    :root: /Users/daicoden/Documents/Ayaion/PoC/
-    :source:
-        - src/
-    :include:
-        - include/
-    :scripts:
-        - tools/scripts
+:project_config: /Users/daicoden/Documents/Ayaion/PoC/config.yml
